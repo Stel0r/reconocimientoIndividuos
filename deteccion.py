@@ -252,7 +252,7 @@ class App:
             return
         else:
             mensaje = QtWidgets.QMessageBox(self.ventana)
-            mensaje.setText("Esta persona es "+persona+" ! con una seguridad del "+"{:5.2f}".format(similitud[persona]*100)+"%")
+            mensaje.setText("Esta persona es "+persona+" ! con una confianza del "+"{:5.2f}".format(similitud[persona]*100)+"%")
             mensaje.exec_()
             return
             
