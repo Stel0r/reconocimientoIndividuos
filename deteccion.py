@@ -192,10 +192,11 @@ class App:
             img1 = sujetos[sujeto][0][0][0]
             img2 = sujetos[sujeto][1][0][0]
             
+            print(img1)
             xp1i1 = img1[0][0]
-            xp2i1 = img1[1][0] 
+            xp2i1 = img1[5][0] 
             xp1i2 = img2[0][0]
-            xp2i2 = img2[1][0]
+            xp2i2 = img2[5][0]
             
             #obtiene los puntos de la imagen siendo analizada
             frame = cv2.imread(self.lista.currentItem().text())
@@ -223,7 +224,7 @@ class App:
             cv2.imwrite('result/face-detect.jpg', frame)
             img0 = landmarks[0][0]
             xp1i0 = img0[0][0]
-            xp2i0 = img0[1][0]
+            xp2i0 = img0[5][0]
             #obtiene los componentes alpha y beta
             alpha = ((xp1i0*xp2i2) - (xp2i0*xp1i2))/((xp1i1*xp2i2)-(xp2i1*xp1i2))
             beta = ((xp2i0*xp1i1)-(xp1i0*xp2i1))/((xp1i1*xp2i2)-(xp2i1*xp1i2))
@@ -244,7 +245,7 @@ class App:
         
         print(similitud)
         persona = max(similitud,key=similitud.get)
-        if(similitud[persona] < 0.90):
+        if(similitud[persona] < 0.89):
             mensaje = QtWidgets.QMessageBox(self.ventana)
             mensaje.setText("No se ha reconocido a nadie")
             mensaje.exec_()
@@ -258,14 +259,3 @@ class App:
     
         
 App()
-
-# read webcam
-    
-    
-# Show image
-cv2.imshow("frame", frame)
-
-# terminate the capture window
-while(True):
-    if cv2.waitKey(20) & 0xFF  == ord('q'):
-        cv2.destroyAllWindows()
