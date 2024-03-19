@@ -1,3 +1,6 @@
+from PyQt5 import QtCore,QtWidgets
+import sys
+
 ''' 
 Facial Landmark Detection in Python with OpenCV
 
@@ -68,6 +71,33 @@ landmark_detector.loadModel(LBFmodel_file)
 
 # get image from webcam
 
+sujetos = {}
+archivos = []
+
+""" 
+for archivo in os.listdir():
+    if(archivo.endswith(".jpeg") or archivo.endswith(".jpg")):
+        persona = archivo.split(" ")[0]
+        if(persona not in sujetos):
+            sujetos[persona] = {}
+        sujetos[persona][archivo] = []
+ """
+for archivo in os.listdir():
+    if(archivo.endswith(".jpeg") or archivo.endswith(".jpg")):
+        archivos.append(archivo)
+
+#CREACION DE INTERFAZ
+
+app = QtWidgets.QApplication([])
+ventana = QtWidgets.QFrame()
+ventana.setWindowTitle("Aplicacion")
+ventana.setGeometry(0,0,900,700)
+ventana.show()
+ventana.setLayout(QtWidgets.QBoxLayout("nw"))
+
+
+
+sys.exit(app.exec())
 
 # read webcam
 frame = cv2.imread("Harry 1.jpeg")
@@ -88,11 +118,11 @@ for (x,y,w,d) in faces:
             # display landmarks on "frame/image,"
             # with blue colour in BGR and thickness 2
             cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 2)
-    print(landmarks)            
+            
 
 
 # save last instance of detected image
-cv2.imwrite('face-detect.jpg', frame)    
+cv2.imwrite('result/face-detect.jpg', frame)    
     
 # Show image
 cv2.imshow("frame", frame)
