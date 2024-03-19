@@ -1,4 +1,4 @@
-from PyQt5 import QtCore,QtWidgets
+from PyQt5 import QtCore,QtWidgets,QtGui
 import sys
 
 ''' 
@@ -82,22 +82,69 @@ for archivo in os.listdir():
             sujetos[persona] = {}
         sujetos[persona][archivo] = []
  """
-for archivo in os.listdir():
-    if(archivo.endswith(".jpeg") or archivo.endswith(".jpg")):
-        archivos.append(archivo)
+class App:
+    def __init__(self):
+        for archivo in os.listdir():
+            if(archivo.endswith(".jpeg") or archivo.endswith(".jpg")):
+                archivos.append(archivo)
+        #CREACION DE INTERFAZ
 
-#CREACION DE INTERFAZ
-
-app = QtWidgets.QApplication([])
-ventana = QtWidgets.QFrame()
-ventana.setWindowTitle("Aplicacion")
-ventana.setGeometry(0,0,900,700)
-ventana.show()
-ventana.setLayout(QtWidgets.QBoxLayout("nw"))
+        app = QtWidgets.QApplication([])
+        self.ventana = QtWidgets.QFrame()
+        self.ventana.setWindowTitle("Aplicacion")
+        self.ventana.setFixedSize(700,500)
+        self.ventana.setStyleSheet("background-color:white")
+        ventanaLayout = QtWidgets.QGridLayout()
 
 
+        lista = QtWidgets.QListWidget()
+        lista.setStyleSheet("font-size:16px;background-color:#EFEFEF")
+        lista.addItems(archivos)
+        lista.setFixedWidth(200)
+        lista.itemClicked.connect(self.itemChanged)
+        ventanaLayout.addWidget(lista,0,0)
 
-sys.exit(app.exec())
+        panelVista = QtWidgets.QWidget()
+        panelVista.setStyleSheet("background-color:#EFEFEF")
+        panelVistaLayout = QtWidgets.QGridLayout()
+        panelVista.setLayout(panelVistaLayout)
+        ventanaLayout.addWidget(panelVista,0,1)
+
+        self.imgLabel = QtWidgets.QLabel()
+        img = QtGui.QPixmap("Harry 1.jpeg").scaled(300,300,aspectRatioMode=QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+        self.imgLabel.setPixmap(img)
+        panelVistaLayout.addWidget(self.imgLabel,0,0,QtCore.Qt.AlignmentFlag.AlignCenter)
+        
+        botonClasificar = QtWidgets.QPushButton("Clasificar")
+        botonClasificar.clicked.connect(self.clasificar)
+        botonClasificar.setStyleSheet("background-color:#CCCCCC")
+        panelVistaLayout.addWidget(botonClasificar,1,0)
+        
+        botonAdivinar = QtWidgets.QPushButton("Adivinar")
+        botonAdivinar.clicked.connect(self.adivinar)
+        botonAdivinar.setStyleSheet("background-color:#CCCCCC")
+        panelVistaLayout.addWidget(botonAdivinar,2,0)
+        
+        
+        self.ventana.setLayout(ventanaLayout)
+        self.ventana.show()
+        sys.exit(app.exec())
+    
+    def itemChanged(self,item:QtWidgets.QListWidgetItem):
+        img = QtGui.QPixmap(item.text()).scaled(300,300,aspectRatioMode=QtCore.Qt.AspectRatioMode.KeepAspectRatio)
+        self.imgLabel.setPixmap(img)
+        self.imgLabel.repaint()
+    
+    def clasificar(self):
+        text,ok = QtWidgets.QInputDialog().getText(self.ventana,"Clasificacion","como se llama esta persona ?")
+        if text and ok:
+            print(text)
+    
+    def adivinar(self):
+        print("Es una Persona! creo...")
+    
+        
+App()
 
 # read webcam
 frame = cv2.imread("Harry 1.jpeg")
